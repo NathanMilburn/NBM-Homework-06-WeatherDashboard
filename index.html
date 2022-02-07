@@ -4,9 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Weather Dashboard</title>
 </head>
+
+<!-- <header class="header">Your Weather Dashboard</header> -->
 <body>
+    <div id="header" class="jumbotron jumbotron-fluid text-container">
+        <h1 id="headerText" class="headerDisplay"></h1>
+    </div>
+    <div id="content" class="container">
+        <div class="row">
+            <div id="content-left" class="col-md-3">
+                <form>
+                    <label for="area-search">Search a City for Up-to-Date Weather Information:</label>
+                    <div class="form-row">
+                        <input id="area-search" class="form-main" name="city" value="Seattle"></input>
+                        <button id="searchBtn" class="btn primary-btn" type="submit">&#128269</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
     
 </body>
 </html>
