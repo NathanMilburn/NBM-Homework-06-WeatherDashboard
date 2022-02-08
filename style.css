@@ -8,9 +8,10 @@
     font-family: 'Orbitron';
 }
 
-.jumbotron {
-    padding: 1rem;
-    border-radius: 0;
+#header {
+    text-align: center;
+    color: white;
+    background-image: linear-gradient(90deg, cornflowerblue 0%, black 100%);
 }
 
 /* #area-search {
