@@ -1,5 +1,6 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
 var citySelect = document.querySelector('#area-search');
+var today = moment().format('L');
 // var city = citySelect.val();
 var city = 'Seattle'
 var queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${myAPIKey}`;
