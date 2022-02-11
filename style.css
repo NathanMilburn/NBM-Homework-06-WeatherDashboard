@@ -8,10 +8,25 @@
     font-family: 'Orbitron';
 }
 
+body {
+    background-color: darkgray;
+}
+
 #header {
     text-align: center;
     color: white;
-    background-image: linear-gradient(90deg, cornflowerblue 0%, black 100%);
+    background-image: linear-gradient(90deg, gold 0%, cornflowerblue 100%);
+}
+
+#current-conditions {
+    border: 5px solid cornflowerblue;
+    border-radius: 15px;
+    background-image: linear-gradient(90deg, cornflowerblue 0%, gray 50%, gold 100%);
+}
+
+.card-style {
+    background-color: darkgray;
+    border-radius: 25px;
 }
 
 /* #area-search {
