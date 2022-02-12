@@ -1,18 +1,15 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
-var citySelect = document.querySelector('#area-search');
-var selectionHistory = document.querySelector("#city-results");
-var cityResults = document.querySelector('#city-results');
-var currentForecast = document.querySelector("#city-name");
-var currentTemp = document.querySelector("#currentTemp");
-var currentWind = document.querySelector("#currentWind");
-var currentHumidity = document.querySelector("#currentHumidity");
-var currentUVIndex = document.querySelector("#currentUVIndex");
-var today = moment().format('L');
-var dailyIcon = document.querySelector(".dailyIcon");
-var timeOffset;
-// var city = citySelect.val();
+var citySelect = $('#area-search');
+var selectionHistory = $("#city-results");
+var cityResults = $('#city-results');
+var currentForecast = $("#city-name");
+var currentTemp = $("#currentTemp");
+var currentWind = $("#currentWind");
+var currentHumidity = $("#currentHumidity");
+var currentUVIndex = $("#currentUVIndex");
+var dailyIcon = $(".dailyIcon");
 var city = 'Seattle'
-var queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${myAPIKey}`;
+var queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${myAPIKey}`;
 
 function pullWeatherData() {
 fetch(queryURL)
@@ -20,9 +17,15 @@ fetch(queryURL)
     return response.json();
 })
 .then(function(data) {
+    var currentDate = new Date(data.dt * 1000).toLocaleDateString('en-US');
     console.log(data);
+    currentForecast.text(`${data.name} (${currentDate})`);
+    currentTemp.text(`Temp: ${data.main.temp} ℉`);
+    currentWind.text(`Wind: ${data.wind.speed} MPH`)
+    currentHumidity.text(`Humidity: ${data.main.humidity} %`)
 });
 
 }
 
-$('#searchBtn').on('click',pullWeatherData())
+pullWeatherData();
+// $('#searchBtn').on('click',pullWeatherData())
