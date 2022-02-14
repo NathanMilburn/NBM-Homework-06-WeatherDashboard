@@ -19,13 +19,31 @@ fetch(queryURL)
 .then(function(data) {
     var currentDate = new Date(data.dt * 1000).toLocaleDateString('en-US');
     console.log(data);
+    // Presenting current weather conditions
     currentForecast.text(`${data.name} (${currentDate})`);
     currentTemp.text(`Temp: ${data.main.temp} ℉`);
-    currentWind.text(`Wind: ${data.wind.speed} MPH`)
-    currentHumidity.text(`Humidity: ${data.main.humidity} %`)
-});
-
+    currentWind.text(`Wind: ${data.wind.speed} MPH`);
+    currentHumidity.text(`Humidity: ${data.main.humidity} %`);
+    });
 }
 
 pullWeatherData();
 // $('#searchBtn').on('click',pullWeatherData())
+
+// Possible UV Info pull section //
+// currentUVIndex.text(`UV: ${data.current.uvi}`);
+//     var currentUV = function() {
+//         if (data.current.uvi <= 2 ) {
+//             currentUVIndex.classList.add("zeroRisk");
+//         } else if (data.current.uvi <= 5) {
+//             currentUVIndex.classList.add("lowRisk");
+//         } else if (data.current.uvi <= 7) {
+//             currentUVIndex.classList.add("mediumRisk");
+//         } else if (data.current.uvi <= 10) {
+//             currentUVIndex.classList.add("highRisk");
+//         } else {
+//             currentUVIndex.classList.add("veryHighRisk");
+//         }
+//         console.log("checkUV works")
+//         };
+//         currentUV();
