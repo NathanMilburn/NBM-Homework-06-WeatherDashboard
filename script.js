@@ -1,5 +1,6 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
 var citySelect = $('#area-search');
+var searchBtn = $('#searchBtn');
 var selectionHistory = $("#city-results");
 var cityResults = $('#city-results');
 var currentForecast = $("#city-name");
@@ -28,6 +29,92 @@ fetch(queryURL)
 }
 
 pullWeatherData();
+
+var pullLongLat = function(city) {
+    var selectedPointAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`;
+
+    fetch(selectedPointAPI)
+    .then(function (response) {
+        console.log(response);
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        getWeather(data[0].lat, data[0].lon);
+        forecast.textContent = city + " ";
+        // check local storage and add new city to list
+        var oldHistory = JSON.parse(localStorage.getItem("selection-history")) || [];
+        if (!oldHistory.includes(data[0].name)) {
+        oldHistory.push(data[0].name)
+        localStorage.setItem("selection-history", JSON.stringify(oldHistory));
+        }
+    })
+    .catch(function (error) {
+        alert("Cannot find desired location");
+    });
+};
+
+var getWeather = function(lat, lon) {
+    var latLonURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${myAPIKey}`;
+
+    fetch(latLonURL)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        
+        // creating daily forecast
+        pullWeatherData(data);
+        // add weather card details here
+        for (var i = 1; i < 6; i++) {
+            var findCard = ".day" + i;
+            var parentElement = document.querySelector(findCard);
+            var ulChildEl = parentElement.querySelector(".Stats");
+            var h4ChildEl = parentElement.querySelector(".card-body");
+            var temp = ulChildEl.querySelector(".Temp");
+            var wind = ulChildEl.querySelector(".Wind");
+            var humidity = ulChildEl.querySelector(".Humidity");
+            var date = h4ChildEl.querySelector(".Date");
+            var icon = h4ChildEl.querySelector(".cardImg");
+            timeOffset = data.timezone_offset;
+            temp.textContent = "Temp: " + data.daily[i].temp.day;
+            humidity.textContent = "Humidity: " + data.daily[i].humidity;
+            wind.textContent = "Wind: " + data.daily[1].wind_speed;
+            date.textContent = new Date((data.current.dt + timeOffset)*1000).toLocaleDateString();
+            var weatherIcon = data.daily[i].weather[0].icon;
+            icon.setAttribute("src", `https://openweathermap.org/img/w/${weatherIcon}.png`);
+        };
+ 
+    })
+    .catch(function (error) {
+        alert("Unable to find that city");
+    });
+};
+
+var displayHistory = function(city) {
+    var historyItem = document.createElement("li");
+    historyItem.innerText=city;
+    historyItem.addEventListener("click", function(event) {
+        var city = event.target.innerText;
+        getLongLat(city);
+    });
+    searchHistory.appendChild(historyItem);
+};
+
+var pullStorage = function() {
+    var history = JSON.parse(localStorage.getItem("selection-history")) || [];
+    for (var i = 0; i < history.length; i++) {
+        printHistory(history[i]);
+    }
+};
+pullStorage();
+
+// searchBtn.addEventListener("click", function() {
+//     var selectCity = citySelect.value.trim();
+//     pullLongLat(selectCity);
+//     displayHistory(selectCity);
+// });
 // $('#searchBtn').on('click',pullWeatherData())
 
 // Possible UV Info pull section //
@@ -44,6 +131,5 @@ pullWeatherData();
 //         } else {
 //             currentUVIndex.classList.add("veryHighRisk");
 //         }
-//         console.log("checkUV works")
 //         };
 //         currentUV();
