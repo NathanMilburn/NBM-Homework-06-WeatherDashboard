@@ -1,7 +1,6 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
-var areaSearch = $('#area-search');
+// var areaSearch = $('#area-search');
 var searchBtn = $('#searchBtn');
-var selectionHistory = $("#city-results");
 var cityResults = $('#city-results');
 var currentForecast = $("#city-name");
 var currentTemp = $("#currentTemp");
@@ -18,12 +17,12 @@ function pullWeatherData(data) {
     currentHumidity.text(`Humidity: ${data.current.humidity} %`);
 }
 
+// `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`
 var pullLongLat = function(city) {
-    var selectedPointAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`;
+    var selectedPointAPI = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${myAPIKey}`;
     
     fetch(selectedPointAPI)
     .then(function (response) {
-        console.log(response);
         return response.json();
     })
     .then(function (data) {
@@ -86,9 +85,9 @@ var displayHistory = function(city) {
     historyItem.innerText=city;
     historyItem.addEventListener("click", function(event) {
         var city = event.target.innerText;
-        getLongLat(city);
+        pullLongLat(city);
     });
-    selectionHistory.appendChild(historyItem);
+    cityResults.append(historyItem);
 };
 
 var pullStorage = function() {
@@ -101,7 +100,7 @@ pullStorage();
 
 $('#searchBtn').on('click', function(event){
     event.preventDefault();
-    areaSearch.val().trim();
+    var areaSearch = $('#area-search').val().trim();
     pullLongLat(areaSearch);
     displayHistory(areaSearch);
 });
