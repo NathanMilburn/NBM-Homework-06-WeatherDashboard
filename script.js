@@ -40,22 +40,20 @@ var pullLongLat = function(city) {
     })
     .then(function (data) {
         console.log(data);
-        getWeather(data[0].lat, data[0].lon);
+        retrieveWeatherData(data[0].lat, data[0].lon);
         forecast.textContent = city + " ";
         // check local storage and add new city to list
-        var oldHistory = JSON.parse(localStorage.getItem("selection-history")) || [];
+        var oldHistory = JSON.parse(localStorage.getItem("city-results")) || [];
         if (!oldHistory.includes(data[0].name)) {
         oldHistory.push(data[0].name)
-        localStorage.setItem("selection-history", JSON.stringify(oldHistory));
+        localStorage.setItem("city-results", JSON.stringify(oldHistory));
         }
-    })
-    .catch(function (error) {
-        alert("Cannot find desired location");
     });
 };
 
-var getWeather = function(lat, lon) {
+var retrieveWeatherData = function(lat, lon) {
     var latLonURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${myAPIKey}`;
+    // Error message for above URL: {"cod":401, "message": "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info."} //
 
     fetch(latLonURL)
     .then(function (response) {
@@ -84,6 +82,7 @@ var getWeather = function(lat, lon) {
             date.textContent = new Date((data.current.dt + timeOffset)*1000).toLocaleDateString();
             var weatherIcon = data.daily[i].weather[0].icon;
             icon.setAttribute("src", `https://openweathermap.org/img/w/${weatherIcon}.png`);
+            // 404 error with above URL //
         };
  
     })
@@ -91,6 +90,7 @@ var getWeather = function(lat, lon) {
         alert("Unable to find that city");
     });
 };
+
 
 var displayHistory = function(city) {
     var historyItem = document.createElement("li");
@@ -103,7 +103,7 @@ var displayHistory = function(city) {
 };
 
 var pullStorage = function() {
-    var history = JSON.parse(localStorage.getItem("selection-history")) || [];
+    var history = JSON.parse(localStorage.getItem("city-results")) || [];
     for (var i = 0; i < history.length; i++) {
         printHistory(history[i]);
     }
