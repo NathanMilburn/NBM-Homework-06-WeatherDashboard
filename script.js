@@ -1,5 +1,5 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
-var citySelect = $('#area-search');
+var areaSearch = $('#area-search');
 var searchBtn = $('#searchBtn');
 var selectionHistory = $("#city-results");
 var cityResults = $('#city-results');
@@ -9,30 +9,18 @@ var currentWind = $("#currentWind");
 var currentHumidity = $("#currentHumidity");
 var currentUVIndex = $("#currentUVIndex");
 var dailyIcon = $(".dailyIcon");
-var city = 'Seattle'
-var queryURL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${myAPIKey}`;
+// var city = 'Kirkland'
 
-function pullWeatherData() {
-fetch(queryURL)
-.then(function(response) {
-    return response.json();
-})
-.then(function(data) {
-    var currentDate = new Date(data.dt * 1000).toLocaleDateString('en-US');
-    console.log(data);
+function pullWeatherData(data) {
     // Presenting current weather conditions
-    currentForecast.text(`${data.name} (${currentDate})`);
-    currentTemp.text(`Temp: ${data.main.temp} ℉`);
-    currentWind.text(`Wind: ${data.wind.speed} MPH`);
-    currentHumidity.text(`Humidity: ${data.main.humidity} %`);
-    });
+    currentTemp.text(`Temp: ${data.current.temp} ℉`);
+    currentWind.text(`Wind: ${data.current.wind_speed} MPH`);
+    currentHumidity.text(`Humidity: ${data.current.humidity} %`);
 }
-
-pullWeatherData();
 
 var pullLongLat = function(city) {
     var selectedPointAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`;
-
+    
     fetch(selectedPointAPI)
     .then(function (response) {
         console.log(response);
@@ -40,8 +28,9 @@ var pullLongLat = function(city) {
     })
     .then(function (data) {
         console.log(data);
-        retrieveWeatherData(data[0].lat, data[0].lon);
-        forecast.textContent = city + " ";
+        retrieveWeatherData(data.coord.lat, data.coord.lon);
+        var currentDate = new Date(data.dt * 1000).toLocaleDateString('en-US');
+        currentForecast.text(`${city} (${currentDate})`);
         // check local storage and add new city to list
         var oldHistory = JSON.parse(localStorage.getItem("city-results")) || [];
         if (!oldHistory.includes(data[0].name)) {
@@ -79,7 +68,7 @@ var retrieveWeatherData = function(lat, lon) {
             temp.textContent = "Temp: " + data.daily[i].temp.day;
             humidity.textContent = "Humidity: " + data.daily[i].humidity;
             wind.textContent = "Wind: " + data.daily[1].wind_speed;
-            date.textContent = new Date((data.current.dt + timeOffset)*1000).toLocaleDateString();
+            date.textContent = new Date((data.daily[i] + timeOffset)*1000).toLocaleDateString();
             var weatherIcon = data.daily[i].weather[0].icon;
             icon.setAttribute("src", `https://openweathermap.org/img/w/${weatherIcon}.png`);
             // 404 error with above URL //
@@ -99,7 +88,7 @@ var displayHistory = function(city) {
         var city = event.target.innerText;
         getLongLat(city);
     });
-    searchHistory.appendChild(historyItem);
+    selectionHistory.appendChild(historyItem);
 };
 
 var pullStorage = function() {
@@ -110,12 +99,12 @@ var pullStorage = function() {
 };
 pullStorage();
 
-// searchBtn.addEventListener("click", function() {
-//     var selectCity = citySelect.value.trim();
-//     pullLongLat(selectCity);
-//     displayHistory(selectCity);
-// });
-// $('#searchBtn').on('click',pullWeatherData())
+$('#searchBtn').on('click', function(event){
+    event.preventDefault();
+    areaSearch.val().trim();
+    pullLongLat(areaSearch);
+    displayHistory(areaSearch);
+});
 
 // Possible UV Info pull section //
 // currentUVIndex.text(`UV: ${data.current.uvi}`);
