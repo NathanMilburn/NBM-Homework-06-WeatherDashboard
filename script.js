@@ -15,7 +15,23 @@ function pullWeatherData(data) {
     currentTemp.text(`Temp: ${data.current.temp} ℉`);
     currentWind.text(`Wind: ${data.current.wind_speed} MPH`);
     currentHumidity.text(`Humidity: ${data.current.humidity} %`);
-}
+    currentUVIndex.text(`UV Index: ${data.current.uvi}`);
+    var currentUV = function() {
+        if (data.current.uvi <= 2 ) {
+            currentUVIndex.classList.add("zeroRisk")
+        } else if (data.current.uvi <= 5) {
+            currentUVIndex.classList.add("lowRisk")
+        } else if (data.current.uvi <= 7) {
+            currentUVIndex.classList.add("mediumRisk")
+        } else if (data.current.uvi <= 10) {
+            currentUVIndex.classList.add("highRisk")
+        } else if (data.current.uvi > 10) {
+            currentUVIndex.classList.add("veryHighRisk");
+        }
+        currentUV();
+        };
+    }
+
 
 // `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`
 var pullLongLat = function(city) {
@@ -31,10 +47,11 @@ var pullLongLat = function(city) {
         var currentDate = new Date(data.dt * 1000).toLocaleDateString('en-US');
         currentForecast.text(`${city} (${currentDate})`);
         // check local storage and add new city to list
-        var oldHistory = JSON.parse(localStorage.getItem("city-results")) || [];
-        if (!oldHistory.includes(data[0].name)) {
-        oldHistory.push(data[0].name)
-        localStorage.setItem("city-results", JSON.stringify(oldHistory));
+        var history = JSON.parse(localStorage.getItem("city-results")) || [];
+        if (!history.includes(data.name)) {
+        history.push(data.name)
+        localStorage.setItem("city-results", JSON.stringify(history));
+        displayHistory(data.name);
         }
     });
 };
@@ -61,13 +78,13 @@ var retrieveWeatherData = function(lat, lon) {
             var temp = ulChildEl.querySelector(".Temp");
             var wind = ulChildEl.querySelector(".Wind");
             var humidity = ulChildEl.querySelector(".Humidity");
-            var date = h4ChildEl.querySelector(".Date");
+            var date = h4ChildEl.querySelector(`.Date${i}`);
             var icon = h4ChildEl.querySelector(".cardImg");
-            timeOffset = data.timezone_offset;
-            temp.textContent = "Temp: " + data.daily[i].temp.day;
-            humidity.textContent = "Humidity: " + data.daily[i].humidity;
-            wind.textContent = "Wind: " + data.daily[1].wind_speed;
-            date.textContent = new Date((data.daily[i] + timeOffset)*1000).toLocaleDateString();
+            timeOffset = data.timezone_offset; 
+            temp.textContent = "Temp: " + data.daily[i].temp.day + " ℉";
+            humidity.textContent = "Humidity: " + data.daily[i].humidity + "%";
+            wind.textContent = "Wind: " + data.daily[1].wind_speed + " MPH";
+            date.textContent = new Date((data.daily[i].dt + timeOffset)*1000).toLocaleDateString();
             var weatherIcon = data.daily[i].weather[0].icon;
             icon.setAttribute("src", `https://openweathermap.org/img/w/${weatherIcon}.png`);
             // 404 error with above URL //
@@ -93,7 +110,7 @@ var displayHistory = function(city) {
 var pullStorage = function() {
     var history = JSON.parse(localStorage.getItem("city-results")) || [];
     for (var i = 0; i < history.length; i++) {
-        printHistory(history[i]);
+        displayHistory(history[i]);
     }
 };
 pullStorage();
@@ -102,22 +119,5 @@ $('#searchBtn').on('click', function(event){
     event.preventDefault();
     var areaSearch = $('#area-search').val().trim();
     pullLongLat(areaSearch);
-    displayHistory(areaSearch);
 });
 
-// Possible UV Info pull section //
-// currentUVIndex.text(`UV: ${data.current.uvi}`);
-//     var currentUV = function() {
-//         if (data.current.uvi <= 2 ) {
-//             currentUVIndex.classList.add("zeroRisk");
-//         } else if (data.current.uvi <= 5) {
-//             currentUVIndex.classList.add("lowRisk");
-//         } else if (data.current.uvi <= 7) {
-//             currentUVIndex.classList.add("mediumRisk");
-//         } else if (data.current.uvi <= 10) {
-//             currentUVIndex.classList.add("highRisk");
-//         } else {
-//             currentUVIndex.classList.add("veryHighRisk");
-//         }
-//         };
-//         currentUV();
