@@ -61,6 +61,11 @@ The last step was to set a function that would pull weather data on a button cli
 
 ![DisplayHistoryandSaveBtnCode](./images/Display-History-and-Search-Button.PNG "Display History and Save Button Code")
 
+FUTURE DEVELOPMENTS 
+-
+
+Given more time, I would like to correct the formatting to display the current weather data in the same line as the aside section to limit the amount of empty space as well as formatting the current weather section to not be a flat and empty div prior to the API call.
+
 
 DEPLOYED APPLICATION LINKS
 -
