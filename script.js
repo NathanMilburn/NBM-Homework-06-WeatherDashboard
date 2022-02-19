@@ -1,5 +1,4 @@
 var myAPIKey = "830e2296d28e9adef700a0677aa768ed";
-// var areaSearch = $('#area-search');
 var searchBtn = $('#searchBtn');
 var cityResults = $('#city-results');
 var currentForecast = $("#city-name");
@@ -8,7 +7,7 @@ var currentWind = $("#currentWind");
 var currentHumidity = $("#currentHumidity");
 var currentUVIndex = $("#currentUVIndex");
 var dailyIcon = $(".dailyIcon");
-// var city = 'Kirkland'
+
 
 function pullWeatherData(data) {
     // Presenting current weather conditions
@@ -32,8 +31,6 @@ function pullWeatherData(data) {
         };
     }
 
-
-// `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${myAPIKey}`
 var pullLongLat = function(city) {
     var selectedPointAPI = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${myAPIKey}`;
     
@@ -58,8 +55,6 @@ var pullLongLat = function(city) {
 
 var retrieveWeatherData = function(lat, lon) {
     var latLonURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=${myAPIKey}`;
-    // Error message for above URL: {"cod":401, "message": "Invalid API key. Please see http://openweathermap.org/faq#error401 for more info."} //
-
     fetch(latLonURL)
     .then(function (response) {
         return response.json();
@@ -83,20 +78,17 @@ var retrieveWeatherData = function(lat, lon) {
             timeOffset = data.timezone_offset; 
             temp.textContent = "Temp: " + data.daily[i].temp.day + " ℉";
             humidity.textContent = "Humidity: " + data.daily[i].humidity + "%";
-            wind.textContent = "Wind: " + data.daily[1].wind_speed + " MPH";
+            wind.textContent = "Wind: " + data.daily[i].wind_speed + " MPH";
             date.textContent = new Date((data.daily[i].dt + timeOffset)*1000).toLocaleDateString();
             var weatherIcon = data.daily[i].weather[0].icon;
             icon.setAttribute("src", `https://openweathermap.org/img/w/${weatherIcon}.png`);
             // 404 error with above URL //
         };
  
-    })
-    .catch(function (error) {
-        alert("Unable to find that city");
     });
 };
 
-
+// Displays a history of selected cities
 var displayHistory = function(city) {
     var historyItem = document.createElement("li");
     historyItem.innerText=city;
@@ -115,6 +107,7 @@ var pullStorage = function() {
 };
 pullStorage();
 
+// Pulls weather data on icon click 
 $('#searchBtn').on('click', function(event){
     event.preventDefault();
     var areaSearch = $('#area-search').val().trim();

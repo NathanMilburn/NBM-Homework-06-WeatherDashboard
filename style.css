@@ -40,7 +40,7 @@ body {
 }
 
 
-
+/* Styling for current day forecast */
 #current-conditions {
     border: 5px solid cornflowerblue;
     border-radius: 15px;
