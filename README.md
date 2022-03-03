@@ -1,31 +1,24 @@
 # NBM-Homework-06-WeatherDashboard
 
-USER STORY
--
+## USER STORY
 
 (SUPPLIED)
 
-AS A traveler
-
-I WANT to see the weather outlook for multiple cities
-
-SO THAT I can plan a trip accordingly
+    AS A traveler
+    I WANT to see the weather outlook for multiple cities
+    SO THAT I can plan a trip accordingly
 
 (MY USER STORY)
 
-AS A web developer
+    AS A web developer
+    I WANT to create a weather dashboard that allows the user to view weather forecasts based on what city they select
+    SO THAT I can showcase my understanding of server-side-APIs and create a helpful app that I can use for future travel planning.
 
-I WANT to create a weather dashboard that allows the user to view weather forecasts based on what city they select
-
-SO THAT I can showcase my understanding of server-side-APIs and create a helpful app that I can use for future travel planning.
-
-DEPLOYED APPLICATION
--
+## DEPLOYED APPLICATION
 
 ![DeployedWeatherApplicationImage](./images/Weather-Dashboard.PNG "Deployed Weather App")
 
-PROCESS DESCRIPTION
--
+## PROCESS DESCRIPTION
 
 I began this process by first structuring the jumbotron header and the city search/selection sections based on formatting suggestions from various bootstrap guides and stackoverflow forum responses. 
 
@@ -61,13 +54,12 @@ The last step was to set a function that would pull weather data on a button cli
 
 ![DisplayHistoryandSaveBtnCode](./images/Display-History-and-Search-Button.PNG "Display History and Save Button Code")
 
-FUTURE DEVELOPMENTS 
--
+## FUTURE DEVELOPMENTS 
 
 Given more time, I would like to correct the formatting to display the current weather data in the same line as the aside section to limit the amount of empty space as well as formatting the current weather section to not be a flat and empty div prior to the API call.
 
 
-DEPLOYED APPLICATION LINKS
--
+## DEPLOYED APPLICATION LINKS
+
 [DeployedWeatherDashboard](https://nathanmilburn.github.io/NBM-Homework-06-WeatherDashboard/)
 [WeatherDashboardRepository](https://github.com/NathanMilburn/NBM-Homework-06-WeatherDashboard)
